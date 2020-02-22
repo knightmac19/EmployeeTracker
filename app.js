@@ -70,7 +70,34 @@ connection.connect(function(err) {
             else if (answers.choice === "Add Department") {
                 // let depName = answers.addDepName;
                 
-                
+                return inquirer.prompt([
+                    {
+                        type:"input",
+                        name:"addDepName",
+                        message:"Enter Department Name:"
+                    }
+                ]).then(function(answers) {
+                    connection.query("INSERT INTO department (name) VALUES (?) ", 
+                    [
+                        answers.addDepName
+                    ]
+                    ,
+                    function(err, result) {
+                        if(err) throw err;
+                        
+                        // console.table(result);
+                        console.log(`\n ${result.affectedRows} department updated`);
+                        
+                        // repeat();
+                    })
+                }).then(function() {
+                    connection.query("SELECT * FROM department", function(err, result) {
+                        if (err) throw err;
+                        console.log(`\n`);
+                        console.table(result);
+                        repeat();
+                    })
+                });
             }
 
             else if (answers.choice === "Add Employee") {
