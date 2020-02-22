@@ -6,9 +6,9 @@ var userchoices = [
     "View Departments",
     "View Employees",
     "View Roles",
-    "Add Departments",
-    "Add Employees",
-    "Add Roles",
+    "Add Department",
+    "Add Employee",
+    "Add Role",
     "Update Employee Roles",
 ];
 
@@ -42,22 +42,75 @@ connection.connect(function(err) {
             
             if (answers.choice === "View Departments") {
                 connection.query("SELECT * FROM department", function(err, result) {
+                    if (err) throw err;
+                    console.log(`\n`);
                     console.table(result);
-                    connection.end();
+                    repeat();        
                 })
+            }
+
+            else if (answers.choice === "View Employees") {
+                connection.query("SELECT * FROM employee", function(err, result) {
+                    if (err) throw err;
+                    console.log(`\n`);
+                    console.table(result);
+                    repeat();
+                })
+            }
+
+            else if (answers.choice === "View Roles") {
+                connection.query("SELECT * FROM role", function(err, result) {
+                    if (err) throw err;
+                    console.log(`\n`);
+                    console.table(result);
+                    repeat();
+                })
+            }
+
+            else if (answers.choice === "Add Department") {
+                // let depName = answers.addDepName;
+                
+                
+            }
+
+            else if (answers.choice === "Add Employee") {
+                
+            }
+
+            else if (answers.choice === "Add Role") {
+                
+            }
+
+            // this one for updating employee roles
+            else {
+
             }
         })
 
     }
     prompt();
 
+    function repeat() {
+        console.log(`\n\n`);
+        inquirer
+            .prompt([
+            {
+                type: "confirm",
+                name: "repeat",
+                message: "Would you like to view or amend data?",
+            }
+            ])
+            .then(function(answers) {
 
+            if (answers.repeat === true) {
+                prompt()
+            } 
+            else {
+                connection.end()
+            }
 
-
-
-
-
-
+        }); 
+    }
 
 
 
