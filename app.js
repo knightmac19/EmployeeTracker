@@ -71,7 +71,14 @@ connection.connect(function(err) {
                 })
             }
 
-            
+            else if (answers.choice === "View Employees by Role") {
+                connection.query("SELECT * FROM employee INNER JOIN role ON employee.role_id = role.id", function(err, result) {
+                    if (err) throw err;
+                    console.log(`\n`);
+                    console.table(result);
+                    repeat();
+                });
+            }
 
             else if (answers.choice === "Add Department") {
                 
