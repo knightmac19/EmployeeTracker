@@ -101,7 +101,52 @@ connection.connect(function(err) {
             }
 
             else if (answers.choice === "Add Employee") {
-                
+                return inquirer.prompt([
+                    {
+                        type:"input",
+                        name:"empFirst",
+                        message:"Enter Employee's First Name:"
+                    },
+                    {
+                        type:"input",
+                        name:"empLast",
+                        message:"Enter Employee's Last Name:"
+                    },
+                    {
+                        type:"input",
+                        name:"empRoleId",
+                        message:"Enter Employee's Role ID:"
+                    },
+                    {
+                        type:"input",
+                        name:"empManId",
+                        message:"Enter Employee's Manager's ID:"
+                    },
+                ]).then(function(answers) {
+                    connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?) ", 
+                    [
+                        answers.empFirst,
+                        answers.empLast,
+                        answers.empRoleId,
+                        answers.empManId,
+                    ]
+                    ,
+                    function(err, result) {
+                        if(err) throw err;
+                        
+                        // console.table(result);
+                        console.log(`\n ${result.affectedRows} employee updated`);
+                        
+                        // repeat();
+                    })
+                }).then(function() {
+                    connection.query("SELECT * FROM employee", function(err, result) {
+                        if (err) throw err;
+                        console.log(`\n`);
+                        console.table(result);
+                        repeat();
+                    })
+                });
             }
 
             else if (answers.choice === "Add Role") {
