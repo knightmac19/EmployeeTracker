@@ -68,9 +68,8 @@ connection.connect(function(err) {
             }
 
             else if (answers.choice === "Add Department") {
-                // let depName = answers.addDepName;
                 
-                return inquirer.prompt([
+                inquirer.prompt([
                     {
                         type:"input",
                         name:"addDepName",
@@ -101,7 +100,7 @@ connection.connect(function(err) {
             }
 
             else if (answers.choice === "Add Employee") {
-                return inquirer.prompt([
+                inquirer.prompt([
                     {
                         type:"input",
                         name:"empFirst",
@@ -121,16 +120,15 @@ connection.connect(function(err) {
                         type:"input",
                         name:"empManId",
                         message:"Enter Employee's Manager's ID:"
-                    },
+                    }
                 ]).then(function(answers) {
                     connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?,?,?,?) ", 
                     [
                         answers.empFirst,
                         answers.empLast,
                         answers.empRoleId,
-                        answers.empManId,
-                    ]
-                    ,
+                        answers.empManId
+                    ],
                     function(err, result) {
                         if(err) throw err;
                         
@@ -150,7 +148,45 @@ connection.connect(function(err) {
             }
 
             else if (answers.choice === "Add Role") {
-                
+                inquirer.prompt([
+                    {
+                        type:"input",
+                        name:"title",
+                        message:"Enter Role Title:"
+                    },
+                    {
+                        type:"input",
+                        name:"salary",
+                        message:"Enter the salary for this role:"
+                    },
+                    {
+                        type:"input",
+                        name:"departmentId",
+                        message:"Enter this role's department id:"
+                    }
+                ]).then(function(answers) {
+                    connection.query("INSERT INTO role (title, salary, department_id) VALUES (?,?,?) ", 
+                    [
+                        answers.title,
+                        answers.salary,
+                        answers.departmentId
+                    ],
+                    function(err, result) {
+                        if(err) throw err;
+                        
+                        // console.table(result);
+                        console.log(`\n ${result.affectedRows} role updated`);
+                        
+                        // repeat();
+                    })
+                }).then(function() {
+                    connection.query("SELECT * FROM role", function(err, result) {
+                        if (err) throw err;
+                        console.log(`\n`);
+                        console.table(result);
+                        repeat();
+                    })
+                });
             }
 
             // this one for updating employee roles
@@ -166,15 +202,16 @@ connection.connect(function(err) {
         console.log(`\n\n`);
         inquirer
             .prompt([
-            {
-                type: "confirm",
-                name: "repeat",
-                message: "Would you like to view or amend data?",
-            }
+                {
+                    type:"list",
+                    name:"choice",
+                    message:"Choose Action",
+                    choices: ["Return to Main Menu", "Exit"]
+                }
             ])
             .then(function(answers) {
 
-            if (answers.repeat === true) {
+            if (answers.choice === "Return to Main Menu") {
                 prompt()
             } 
             else {
