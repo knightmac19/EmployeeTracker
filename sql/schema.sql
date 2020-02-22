@@ -40,19 +40,19 @@ VALUES ("CEO"),
 ("Human Resources"),
 ("Global Corporate Affairs"),
 ("Digital Management"),
-("General Counsel"),
+("Legal"),
 ("Web Services");
 
 INSERT INTO role (title, salary, department_id)
 VALUES ("CEO", 1681840, 1),
-("Senior Vice President", 10000000, 2),
-("Senior Vice President", 19000000, 3),
-("Senior Vice President", 6900000, 4),
-("Senior Vice President", 5000000, 5),
-("Senior Vice President", 12000000, 6),
-("Senior Vice President", 8000000, 7),
-("Senior Vice President", 7000000, 8),
-("Senior Vice President", 11000000, 9);
+("VP Corporate Development", 10000000, 2),
+("Mr. Worldwide", 19000000, 3),
+("The Money Guy", 6900000, 4),
+("The People Person", 5000000, 5),
+("Soothsayer", 12000000, 6),
+("VP Digital Management", 8000000, 7),
+("General Counsel", 7000000, 8),
+("Tech Person", 11000000, 9);
 
 INSERT INTO employee (first_name, last_name, role_id, manager_id)
 VALUES ("Jeff", "Bezos", 1, null),
