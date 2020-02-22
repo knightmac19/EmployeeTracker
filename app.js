@@ -24,6 +24,30 @@ var connection = mysql.createConnection({
     database: "employee_trackerDB"
 });
 
+
+function repeat() {
+    console.log(`\n\n`);
+    inquirer
+        .prompt([
+            {
+                type:"list",
+                name:"choice",
+                message:"Choose Action",
+                choices: ["Return to Main Menu", "Exit"]
+            }
+        ])
+        .then(function(answers) {
+
+        if (answers.choice === "Return to Main Menu") {
+            prompt()
+        } 
+        else {
+            connection.end()
+        }
+
+    }); 
+}
+
 connection.connect(function(err) {
 
     if(err) {
@@ -308,28 +332,5 @@ connection.connect(function(err) {
 
     }
     prompt();
-
-    function repeat() {
-        console.log(`\n\n`);
-        inquirer
-            .prompt([
-                {
-                    type:"list",
-                    name:"choice",
-                    message:"Choose Action",
-                    choices: ["Return to Main Menu", "Exit"]
-                }
-            ])
-            .then(function(answers) {
-
-            if (answers.choice === "Return to Main Menu") {
-                prompt()
-            } 
-            else {
-                connection.end()
-            }
-
-        }); 
-    }
 
 });

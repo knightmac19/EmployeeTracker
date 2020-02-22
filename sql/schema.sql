@@ -65,8 +65,5 @@ VALUES ("Jeff", "Bezos", 1, null),
 ("David", "Zapolsky", 8, 1),
 ("Andy", "Jassy", 9, 1);
 
-SELECT * 
-FROM employee
-INNER JOIN role 
-ON employee.role_id = role.id;
+-- SELECT * FROM employee INNER JOIN role ON employee.role_id = role.id;
 
