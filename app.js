@@ -6,10 +6,14 @@ var userchoices = [
     "View Departments",
     "View Employees",
     "View Roles",
+    "View Employees by Role",
     "Add Department",
     "Add Employee",
     "Add Role",
     "Update Employee Roles",
+    "Delete Department",
+    "Delete Employee",
+    "Delete Role"
 ];
 
 var connection = mysql.createConnection({
@@ -55,7 +59,7 @@ connection.connect(function(err) {
                     console.log(`\n`);
                     console.table(result);
                     repeat();
-                })
+                });
             }
 
             else if (answers.choice === "View Roles") {
@@ -66,6 +70,8 @@ connection.connect(function(err) {
                     repeat();
                 })
             }
+
+            
 
             else if (answers.choice === "Add Department") {
                 
@@ -84,10 +90,6 @@ connection.connect(function(err) {
                     function(err, result) {
                         if(err) throw err;
                         
-                        // console.table(result);
-                        console.log(`\n ${result.affectedRows} department updated`);
-                        
-                        // repeat();
                     })
                 }).then(function() {
                     connection.query("SELECT * FROM department", function(err, result) {
@@ -132,10 +134,6 @@ connection.connect(function(err) {
                     function(err, result) {
                         if(err) throw err;
                         
-                        // console.table(result);
-                        console.log(`\n ${result.affectedRows} employee updated`);
-                        
-                        // repeat();
                     })
                 }).then(function() {
                     connection.query("SELECT * FROM employee", function(err, result) {
@@ -173,11 +171,88 @@ connection.connect(function(err) {
                     ],
                     function(err, result) {
                         if(err) throw err;
+                    })
+
+                }).then(function() {
+                    connection.query("SELECT * FROM role", function(err, result) {
+                        if (err) throw err;
+                        console.log(`\n`);
+                        console.table(result);
+                        repeat();
+                    })
+                });
+            }
+
+            else if (answers.choice === "Delete Department") {
+                inquirer.prompt([
+                    {
+                        type:"input",
+                        name:"depName",
+                        message:"Enter Department Name:"
+                    }
+                ]).then(function(answers) {
+                    connection.query("DELETE FROM department WHERE name = ?", 
+                    [
+                        answers.depName
+                    ]
+                    ,
+                    function(err, result) {
+                        if(err) throw err;
                         
-                        // console.table(result);
-                        console.log(`\n ${result.affectedRows} role updated`);
+                    })
+                }).then(function() {
+                    connection.query("SELECT * FROM department", function(err, result) {
+                        if (err) throw err;
+                        console.log(`\n`);
+                        console.table(result);
+                        repeat();
+                    })
+                });
+            }
+
+            else if (answers.choice === "Delete Employee") {
+                inquirer.prompt([
+                    {
+                        type:"input",
+                        name:"empLast",
+                        message:"Enter Employee Last Name:"
+                    }
+                ]).then(function(answers) {
+                    connection.query("DELETE FROM employee WHERE last_name = ?", 
+                    [
+                        answers.empLast
+                    ]
+                    ,
+                    function(err, result) {
+                        if(err) throw err;
                         
-                        // repeat();
+                    })
+                }).then(function() {
+                    connection.query("SELECT * FROM employee", function(err, result) {
+                        if (err) throw err;
+                        console.log(`\n`);
+                        console.table(result);
+                        repeat();
+                    })
+                });
+            }
+
+            else if (answers.choice === "Delete Role") {
+                inquirer.prompt([
+                    {
+                        type:"input",
+                        name:"title",
+                        message:"Enter Role Title:"
+                    }
+                ]).then(function(answers) {
+                    connection.query("DELETE FROM role WHERE title = ?", 
+                    [
+                        answers.title
+                    ]
+                    ,
+                    function(err, result) {
+                        if(err) throw err;
+                        
                     })
                 }).then(function() {
                     connection.query("SELECT * FROM role", function(err, result) {
@@ -191,7 +266,36 @@ connection.connect(function(err) {
 
             // this one for updating employee roles
             else {
+                inquirer.prompt([
+                    {
+                        type:"input",
+                        name:"empId",
+                        message:"Enter Employee ID:"
+                    },
+                    {
+                        type:"input",
+                        name:"empRole",
+                        message:"Enter new role id:"
+                    }
+                ]).then(function(answers) {
+                    connection.query("UPDATE employee SET role_id = ? WHERE id = ? ", 
+                    [
+                        parseInt(answers.empRole),
+                        parseInt(answers.empId)
+                        
+                    ],
+                    function(err, result) {
+                        if(err) throw err;
+                    })
 
+                }).then(function() {
+                    connection.query("SELECT * FROM employee INNER JOIN role ON employee.role_id = role.id", function(err, result) {
+                        if (err) throw err;
+                        console.log(`\n`);
+                        console.table(result);
+                        repeat();
+                    })
+                });
             }
         })
 
@@ -220,7 +324,5 @@ connection.connect(function(err) {
 
         }); 
     }
-
-
 
 });
